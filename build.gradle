@@ -1,0 +1,48 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+sourceCompatibility = 1.5
+defaultTasks 'clean', 'build'
+
+configurations{
+    //declare custom pluginLibs configuration to include only libs for this plugin
+    pluginLibs
+
+    //declare compile to extend from pluginLibs so it inherits the dependencies
+    compile{
+        extendsFrom pluginLibs
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    pluginLibs group: 'org.freemarker', name: 'freemarker', version: '2.3.20'
+    compile(group:'org.rundeck', name: 'rundeck-core', version: '2.0.4')
+}
+
+// task to copy plugin libs to output/lib dir
+task copyToLib(type: Copy) {
+    into "$buildDir/output/lib"
+    from configurations.pluginLibs
+}
+
+
+jar {
+    //include contents of output dir
+    from "$buildDir/output"
+    manifest {
+        attributes 'Rundeck-Plugin-Version': '1.1', 'Rundeck-Plugin-Archive': 'true'
+        //create space-separated list of pluginLibs
+        def libList = configurations.pluginLibs.collect{'lib/'+it.name}.join(' ')
+        attributes 'Rundeck-Plugin-Classnames': 'com.bitplaces.rundeck.plugins.slack.SlackNotificationPlugin', 'Rundeck-Plugin-Libs': "${libList}"
+    }
+}
+
+//set jar task to depend on copyToLib
+jar.dependsOn(copyToLib)
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.10'
+}
