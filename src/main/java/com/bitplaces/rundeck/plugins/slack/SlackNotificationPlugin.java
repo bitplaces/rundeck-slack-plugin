@@ -80,22 +80,19 @@ public class SlackNotificationPlugin implements NotificationPlugin {
     @PluginProperty(
             title = "API Auth Token",
             description = "Slack API authentication token.",
-            required = true,
-            scope = PropertyScope.Instance)
+            required = true)
     private String apiAuthToken;
 
     @PluginProperty(
             title = "Team Domain",
             description = "Slack team domain.",
-            required = true,
-            scope = PropertyScope.Instance)
+            required = true)
     private String teamDomain;
 
     @PluginProperty(
             title = "Channel",
             description = "Override default Slack channel to send notification message to.",
             required = false,
-            scope = PropertyScope.Instance,
             defaultValue = "#general")
     private String room;
 
@@ -144,7 +141,7 @@ public class SlackNotificationPlugin implements NotificationPlugin {
         String templateName = TRIGGER_NOTIFICATION_DATA.get(trigger).template;
         String color = TRIGGER_NOTIFICATION_DATA.get(trigger).color;
 
-        Map<String, Object> model = new HashMap();
+        HashMap<String, Object> model = new HashMap<String, Object>();
         model.put("trigger", trigger);
         model.put("color", color);
         model.put("executionData", executionData);
@@ -176,17 +173,12 @@ public class SlackNotificationPlugin implements NotificationPlugin {
     private String invokeSlackAPIMethod(String teamDomain, String token, String message) {
         URL requestUrl = toURL(SLACK_API_URL_SCHEMA + teamDomain + SLACK_API_BASE + SLACK_API_WEHOOK_PATH + token);
 
-        System.err.printf("Calling %s\n\n\n", requestUrl.toString());
-
         HttpURLConnection connection = null;
         InputStream responseStream = null;
         try {
             connection = openConnection(requestUrl);
-            System.err.printf("Putting %s\n\n\n", message);
             putRequestStream(connection, message);
             responseStream = getResponseStream(connection);
-            int responseCode = getResponseCode(connection);
-
             return getSlackResponse(responseStream);
 
         } finally {

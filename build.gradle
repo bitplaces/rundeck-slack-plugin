@@ -1,6 +1,6 @@
 apply plugin: 'java'
-apply plugin: 'idea'
-sourceCompatibility = 1.5
+sourceCompatibility = 1.6
+project.version = 1.0
 defaultTasks 'clean', 'build'
 
 configurations{
@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     pluginLibs group: 'org.freemarker', name: 'freemarker', version: '2.3.20'
-    compile(group:'org.rundeck', name: 'rundeck-core', version: '2.0.4')
+    compile(group:'org.rundeck', name: 'rundeck-core', version: '2.0.3')
 }
 
 // task to copy plugin libs to output/lib dir
@@ -27,7 +27,6 @@ task copyToLib(type: Copy) {
     into "$buildDir/output/lib"
     from configurations.pluginLibs
 }
-
 
 jar {
     //include contents of output dir
