@@ -1,7 +1,8 @@
 rundeck-slack-plugin
 ======================
 
-Sends rundeck notification messages to a slack channel
+Sends rundeck notification messages to a slack channel. This plugin 
+is based on HipChat Plugin from Hayden Bakkum
 
 Installation Instructions
 -------------------------
