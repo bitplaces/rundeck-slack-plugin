@@ -65,3 +65,17 @@ The success message, however, was formatted using the following custom template:
 ```
 
 This can give you much more compact messages should you want that.
+
+### Slack icon
+
+You have three possibilties to enable slack icons for incoming web-hooks:
+
+1.  define a icon-url in RunDeck job configuration
+2.  set a custom emoji in slack for `:rundeck:`, see [here](https://slack.com/emoji), leave the icon-url empty
+3.  set default icon for Incoming WebHooks
+
+## Contributors
+*  Original author: Hayden Bakkum @hbakkum
+*  @totallyunknown
+*  @notandy
+*  @lusis

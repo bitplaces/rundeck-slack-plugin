@@ -119,7 +119,7 @@ public class SlackNotificationPlugin implements NotificationPlugin {
      * @throws SlackNotificationPluginException when any error occurs sending the Slack message
      * @return true, if the Slack API response indicates a message was successfully delivered to a chat room
      */
-    public boolean postNotification(String trigger,Map executionData,Map config) {
+    public boolean postNotification(String trigger, Map executionData, Map config) {
 
         String ACTUAL_SLACK_TEMPLATE;
 
@@ -152,8 +152,6 @@ public class SlackNotificationPlugin implements NotificationPlugin {
         }catch(Exception e){
             System.err.printf("Got and exception from Freemarker: %s", e.getMessage());
         }
-
-        System.err.printf("Trigger %s fired for %s, configuration: %s\n",trigger,executionData,config);
 
         if (!TRIGGER_NOTIFICATION_DATA.containsKey(trigger)) {
             throw new IllegalArgumentException("Unknown trigger type: [" + trigger + "].");
