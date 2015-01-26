@@ -47,11 +47,6 @@ import freemarker.template.TemplateException;
 @PluginDescription(title="Slack", description="Sends Rundeck Notifications to Slack")
 public class SlackNotificationPlugin implements NotificationPlugin {
 
-    private static final String SLACK_API_BASE = ".slack.com/";
-    private static final String SLACK_API_URL_SCHEMA = "https://";
-    private static final String SLACK_API_WEHOOK_PATH = "services/hooks/incoming-webhook";
-    private static final String SLACK_API_TOKEN = "?token=%s";
-
     private static final String SLACK_MESSAGE_COLOR_GREEN = "good";
     private static final String SLACK_MESSAGE_COLOR_YELLOW = "warning";
     private static final String SLACK_MESSAGE_COLOR_RED = "danger";
@@ -68,25 +63,19 @@ public class SlackNotificationPlugin implements NotificationPlugin {
 
     private static final Configuration FREEMARKER_CFG = new Configuration();
 
-
-
     @PluginProperty(
-            title = "API Auth Token",
-            description = "Slack API authentication token.",
-            required = true)
-    private String apiAuthToken;
-
-    @PluginProperty(
-            title = "Team Domain",
-            description = "Slack team domain.",
-            required = true)
-    private String teamDomain;
+            title = "Incoming WebHook URL",
+            description = "Slack Incoming WebHook URL",
+            required = true
+    )
+    private String wh_url;
 
     @PluginProperty(
             title = "Channel",
             description = "Override default Slack channel to send notification message to.",
             required = false,
-            defaultValue = "#general")
+            defaultValue = "#general"
+    )
     private String room;
 
     @PluginProperty(
@@ -157,19 +146,13 @@ public class SlackNotificationPlugin implements NotificationPlugin {
             throw new IllegalArgumentException("Unknown trigger type: [" + trigger + "].");
         }
 
-        if (teamDomain.isEmpty()) {
+        if (wh_url.isEmpty()) {
             throw new SlackNotificationPluginException(
-                    "Slack teamDomain 'plugin.Notification.SlackNotification.teamDomain' missing in framework or project properties");
-        }
-
-        if (apiAuthToken.isEmpty()) {
-            throw new SlackNotificationPluginException(
-                    "Slack apiAuthToken 'plugin.Notification.SlackNotification.apiAuthToken' missing in framework or project properties");
+                    "Slack wh_url 'plugin.Notification.SlackNotification.wh_url' missing in framework or project properties");
         }
 
         String message = generateMessage(trigger, executionData, config, room);
-        String token = String.format(SLACK_API_TOKEN, urlEncode(apiAuthToken));
-        String slackResponse = invokeSlackAPIMethod(teamDomain, token, message);
+        String slackResponse = invokeSlackAPIMethod(wh_url, message);
 
         if ("ok".equals(slackResponse)) {
             return true;
@@ -218,8 +201,8 @@ public class SlackNotificationPlugin implements NotificationPlugin {
         }
     }
 
-    private String invokeSlackAPIMethod(String teamDomain, String token, String message) {
-        URL requestUrl = toURL(SLACK_API_URL_SCHEMA + teamDomain + SLACK_API_BASE + SLACK_API_WEHOOK_PATH + token);
+    private String invokeSlackAPIMethod(String whurl, String message) {
+        URL requestUrl = toURL(whurl);
 
         HttpURLConnection connection = null;
         InputStream responseStream = null;
@@ -241,7 +224,7 @@ public class SlackNotificationPlugin implements NotificationPlugin {
         try {
             return new URL(url);
         } catch (MalformedURLException malformedURLEx) {
-            throw new SlackNotificationPluginException("Slack API URL is malformed: [" + malformedURLEx.getMessage() + "].", malformedURLEx);
+            throw new SlackNotificationPluginException("Slack WebHook URL is malformed: [" + malformedURLEx.getMessage() + "].", malformedURLEx);
         }
     }
 
@@ -292,7 +275,7 @@ public class SlackNotificationPlugin implements NotificationPlugin {
         try {
             return new Scanner(responseStream,"UTF-8").useDelimiter("\\A").next();
         } catch (Exception ioEx) {
-            throw new SlackNotificationPluginException("Error reading Slack API JSON response: [" + ioEx.getMessage() + "].", ioEx);
+            throw new SlackNotificationPluginException("Error reading WebHook JSON response: [" + ioEx.getMessage() + "].", ioEx);
         }
     }
 
