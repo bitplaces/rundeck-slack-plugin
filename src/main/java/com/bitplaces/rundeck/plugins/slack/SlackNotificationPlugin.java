@@ -64,8 +64,8 @@ public class SlackNotificationPlugin implements NotificationPlugin {
     private static final Configuration FREEMARKER_CFG = new Configuration();
 
     @PluginProperty(
-            title = "Incoming WebHook URL",
-            description = "Slack Incoming WebHook URL",
+            title = "Incoming webhook URL",
+            description = "Slack Incoming webhook URL",
             required = true
     )
     private String wh_url;
@@ -224,7 +224,7 @@ public class SlackNotificationPlugin implements NotificationPlugin {
         try {
             return new URL(url);
         } catch (MalformedURLException malformedURLEx) {
-            throw new SlackNotificationPluginException("Slack WebHook URL is malformed: [" + malformedURLEx.getMessage() + "].", malformedURLEx);
+            throw new SlackNotificationPluginException("Slack webhook URL is malformed: [" + malformedURLEx.getMessage() + "].", malformedURLEx);
         }
     }
 
@@ -275,7 +275,7 @@ public class SlackNotificationPlugin implements NotificationPlugin {
         try {
             return new Scanner(responseStream,"UTF-8").useDelimiter("\\A").next();
         } catch (Exception ioEx) {
-            throw new SlackNotificationPluginException("Error reading WebHook JSON response: [" + ioEx.getMessage() + "].", ioEx);
+            throw new SlackNotificationPluginException("Error reading webhook JSON response: [" + ioEx.getMessage() + "].", ioEx);
         }
     }
 

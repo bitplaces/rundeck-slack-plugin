@@ -14,14 +14,11 @@ See the [rundeck documentation](http://rundeck.org/docs/manual/plugins.html#inst
 information on installing rundeck plugins.
 
 ## Configuration
-This plugin uses Slack webhooks. Create a new webhook and copy the provided token.
+This plugin uses Slack incoming webhooks integration. [Create a new webhook](https://demarque.slack.com/services/new) and copy the provided URL.
 
 ![configuration](config.png)
 
-The only required configuration settings are:
-
-- `API Auth Token`: webhook token
-- `Team Domain`: the `mycompany` part of `https://mycompany.slack.com`
+The only required configuration setting is the webhook URL.
 
 Additionally you can set:
 
