@@ -7,8 +7,21 @@ is based on HipChat Plugin from Hayden Bakkum
 Installation Instructions
 -------------------------
 
+1. Get the project (download zip, or git clone)
+
+    git@github.com:bitplaces/rundeck-slack-plugin.git
+
 1. build the source
-2. Copy the plugin jar (rundeck-slack-plugin-\<version\>.jar) into your $RDECK_BASE/libext - no restart of rundeck required. 
+
+    cd rundeck-slack-plugin;
+    
+    ./gradlew
+
+3. result file is in the
+
+    ./build/libs/rundeck-slack-plugin-1.8.jar
+
+4. Copy the plugin jar (rundeck-slack-plugin-\<version\>.jar) into your $RDECK_BASE/libext - no restart of rundeck required. 
 
 See the [rundeck documentation](http://rundeck.org/docs/manual/plugins.html#installing-plugins) for more 
 information on installing rundeck plugins.
